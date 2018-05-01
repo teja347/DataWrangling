@@ -1,0 +1,133 @@
+,Rank,Country,Gold,Silver,Bronze,Total
+1,1,United States of America,1008,811,700,2519
+2,2,Russia,615,501,490,1606
+3,3,Germany,518,529,539,1586
+4,4,Italy,226,188,208,622
+5,5,France,217,237,264,718
+6,6,United Kingdom,215,258,264,737
+8,8,Sweden,185,191,217,593
+9,9,China,166,133,120,419
+10,10,Hungary,159,143,163,465
+11,11,Norway,152,147,126,425
+12,12,Finland,142,141,167,450
+14,14,Australia,134,137,167,438
+15,15,Japan,132,122,139,393
+16,16,Netherlands,96,108,119,323
+17,17,Canada,95,133,151,379
+18,18,Romania,86,89,118,293
+19,19,South Korea,85,82,78,245
+20,20,Switzerland,83,108,109,300
+21,21,Austria,69,97,105,271
+23,23,Cuba,66,62,60,188
+24,24,Poland,63,83,123,269
+25,25,Commonwealth of Inde...,54,44,37,135
+26,26,Bulgaria,52,86,79,217
+27,27,Czechoslovakia,51,56,60,167
+28,28,Denemark,41,64,66,171
+29,29,Belgium,37,51,55,143
+30,30,Turkey,37,23,22,82
+31,31,New Zealand,36,17,34,87
+32,32,Spain,35,49,31,115
+33,33,Greece,30,43,37,110
+34,34,Ukraine,29,23,49,101
+35,35,Yugoslavia,28,34,32,94
+36,36,Kenya,23,28,24,75
+37,37,Brazil,20,25,46,91
+38,38,South Africa,20,24,26,70
+39,39,Ethiopia,18,6,14,38
+40,40,Argentina,17,23,26,66
+41,41,Jamaica,13,25,17,55
+42,42,Czech Repunlic,13,18,13,44
+43,43,Estonia,13,9,15,37
+44,44,Mexico,12,18,25,55
+45,45,Iran,11,15,22,48
+46,46,Belarus,10,22,38,70
+47,47,Kazakhstan,10,18,16,44
+48,48,North-Korea,10,13,20,43
+49,49,India,9,4,7,20
+50,50,Ireland,8,7,8,23
+51,51,Croatia,7,9,8,24
+52,52,Slovakia,7,9,5,21
+53,53,Egypt,7,7,10,24
+54,54,Thailand,7,4,10,21
+55,55,Indonesia,6,10,10,26
+56,56,Morocco,6,5,10,21
+57,57,Lithuania,5,6,9,20
+58,58,Uzbekistan,5,5,8,18
+59,59,Georgia,5,2,11,18
+60,60,Portugal,4,7,11,22
+61,61,Azerbaijan,4,3,9,16
+62,62,Algerija,4,2,8,14
+63,63,Bahamas,4,2,4,10
+64,64,Taiwan,3,6,11,20
+65,65,Slovenia,3,5,11,19
+66,66,Australasia,3,4,5,12
+67,67,Zimbabwe,3,4,1,8
+68,68,Pakistan,3,3,4,10
+69,69,Cameroon,3,1,1,5
+70,70,Nigeria,2,9,12,23
+71,71,Mongolia,2,7,10,19
+72,72,Chile,2,7,4,13
+73,73,Uruguay,2,2,6,10
+74,74,Liechtenstein,2,2,5,9
+75,75,Tunisia,2,2,3,7
+76,76,Dominican Republic,2,1,1,4
+77,77,Latvia,1,9,4,14
+78,78,Trinidad and Tobago,1,5,8,14
+79,79,Columbia,1,3,7,11
+80,80,Uganda,1,3,2,6
+81,81,Peru,1,3,0,4
+82,82,Luxembourg,1,3,0,4
+83,83,Venezuela,1,2,8,11
+84,84,Armenia,1,1,7,9
+85,85,Israel,1,1,5,7
+86,86,Costa Rica,1,1,2,4
+87,87,Syria,1,1,1,3
+88,88,Ecuador,1,1,0,2
+89,89,Hong Kong,1,1,0,2
+90,90,Panama,1,0,2,3
+91,91,Mozambique,1,0,1,2
+92,92,Suriname,1,0,1,2
+93,93,United Arab Emirates,1,0,0,1
+94,94,Burundi,1,0,0,1
+95,95,Namibia,0,4,0,4
+96,96,Serbia,0,3,2,5
+97,97,Philippines,0,2,7,9
+98,98,Moldova,0,2,3,5
+99,99,Malaysia,0,2,2,4
+100,100,Iceland,0,2,2,4
+101,101,Singapore,0,2,0,2
+102,102,Sri Lanka,0,2,0,2
+103,103,Tanzania,0,2,0,2
+104,104,Vietnam,0,2,0,2
+105,105,Puerto Rico,0,1,5,6
+106,106,Ghana,0,1,4,5
+107,107,Bohemia,0,1,3,4
+108,108,Lebanon,0,1,2,3
+109,109,Kyrgyzstan,0,1,2,3
+110,110,Haiti,0,1,1,2
+111,111,Zambia,0,1,1,2
+112,112,Tajikistan,0,1,1,2
+113,113,Saudi Arabia,0,1,1,2
+114,114,Senegal,0,1,0,1
+115,115,Paraquay,0,1,0,1
+116,116,Sudan,0,1,0,1
+117,117,Tonga,0,1,0,1
+118,118,Cote D'Ivoire,0,1,0,1
+119,119,Virgin Islands,0,1,0,1
+120,120,Libya,0,1,0,1
+121,121,Netherlands Antilles,0,1,0,1
+122,122,Qatar,0,0,2,2
+123,123,British West Indies,0,0,2,2
+124,124,Bermuda,0,0,1,1
+125,125,Afghanistan,0,0,1,1
+126,126,Barbados,0,0,1,1
+127,127,Guyana,0,0,1,1
+128,128,Eritrea,0,0,1,1
+129,129,Djibouti,0,0,1,1
+130,130,Niger,0,0,1,1
+131,131,Mauritius,0,0,1,1
+132,132,Macedonia,0,0,1,1
+133,133,Iraq,0,0,1,1
+134,134,Kuwait,0,0,1,1
+135,135,Togo,0,0,1,1

@@ -1,0 +1,292 @@
+---
+title: "Data Wrangling and Husbandry"
+author: "Sai Teja Saggurthi"
+date: "4/30/2018"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+library(tidyverse)
+library(rvest)
+library(broom)
+library(choroplethr)
+library(choroplethrMaps)
+library(data.table)
+```
+
+<style>
+pre {
+  overflow-x: auto;
+}
+pre code {
+  word-wrap: normal;
+  white-space: pre;
+}
+</style>
+
+
+---
+
+## Dataset
+
+Dataset --> Olympics data.
+
+* Data in CSV files. 
+(https://www.kaggle.com/rio2016/olympic-games/data)
+
+* Scraped data from Wikipedia. 
+(https://en.wikipedia.org/wiki/
+2016_Summer_Olympics_medal_table)
+
+* Scraped data from Olympic database. 
+(http://www.theolympicdatabase.nl/home)
+
+Two data sources contain 2016 Olympics data and the other one has overall medals obtained by 
+each country from start of the Olympics till 2016.
+
+--- 
+
+## Scraping and Loading Data
+
+```{r warning=FALSE, echo=FALSE, message=FALSE}
+athletes <- read_csv("E:/R_files_data_wrangling/olympic-games/athletes.csv")
+athletes <- athletes %>% mutate(total = gold + silver + bronze)
+countries <- read_csv("E:/R_files_data_wrangling/olympic-games/countries.csv")
+colnames(countries)[2] <- "nationality"
+```
+
+
+```{r}
+athletes %>% head(5)
+countries %>% head(5)
+```
+
+---
+
+Scraped the 2016 Olympics medal table from wikipedia and cleaned the data.
+
+```{r warning=FALSE, message=FALSE}
+url_wiki <- "https://en.wikipedia.org/wiki/2016_Summer_Olympics_medal_table"
+medal_table2016 <- url_wiki %>% read_html() %>% 
+  html_nodes("table") %>% .[2] %>% html_table(fill = TRUE) %>% data.frame()
+medal_table2016 <- slice(medal_table2016, 1:86)
+colnames(medal_table2016)[2] <- "Country"
+
+```
+
+```{r}
+medal_table2016$Country <- str_replace_all(medal_table2016$Country, "\\([A-Z]{3}\\)", "")
+medal_table2016$Country <- str_replace(medal_table2016$Country, "United States", "United States of America")
+medal_table2016$Country <- str_replace(medal_table2016$Country, "Great Britain", "United Kingdom")
+```
+
+2016 Medal table
+
+```{r}
+medal_table2016 %>% head()
+```
+
+---
+
+Scraping...
+
+Overall Medal Table
+
+```{r warning=FALSE, message=FALSE}
+url_olympic <- "http://www.theolympicdatabase.nl/olympic/medals/countries"
+medal_overall <- url_olympic %>% read_html() %>% 
+  html_nodes("table") %>% .[[5]] %>% html_table(fill = TRUE) %>% data.frame()
+medal_overall <- medal_overall[,c('X1','X3','X4','X6','X8')]
+medal_overall <- medal_overall[-1,]
+colnames(medal_overall) <- c("Rank","Country","Gold","Silver","Bronze")
+medal_overall <- medal_overall %>% 
+  mutate(Total = as.numeric(Gold) + as.numeric(Silver) + as.numeric(Bronze))
+medal_overall <- slice(medal_overall, 1:135)
+medal_overall %>% head()
+```
+
+---
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+medal_overall$Country <- str_replace(medal_overall$Country, "United States", "United States of America")
+medal_overall$Country <- str_replace(medal_overall$Country, "Great Britain", "United Kingdom")
+medal_overall$Country <- str_replace(medal_overall$Country, "Soviet Union", "Russia")
+```
+
+---
+
+Male to Female Ratio in 2016 Olympics 
+
+```{r}
+ggplot(athletes, aes(sex, fill=sex)) + geom_bar() +
+  ggtitle("Bar Plot displaying number of male and female athletes") + xlab("Sex") +
+  ylab("Count")
+```
+
+---
+
+Total number of athletes for each sport
+
+```{r}
+ggplot(athletes, aes(sport)) + geom_bar() + 
+  ggtitle("Bar Plot depicting various sports") + xlab("Sports") + ylab("Count") +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1))
+```
+
+---
+
+For each sport in the olympics which country is producing highest 
+number of athletes.
+
+```{r}
+at <- athletes %>% group_by(sport, nationality) %>% summarise(total=n())
+f<-at %>% filter(total == max(total))
+ggplot(f, aes(sport,total)) + geom_col(aes(fill = nationality)) + xlab("Sport") +
+  ylab("Number of athletes") + 
+  ggtitle("Plot showing highest number of athletes for each sport by country") +
+  theme(axis.text.x = element_text(angle = 65, hjust = 1))
+```
+
+---
+
+
+```{r warning=FALSE, message=FALSE, echo=FALSE}
+atN <- athletes %>% group_by(nationality) %>% summarise(total=n())
+country_gdp_pop <- countries %>% inner_join(atN)
+colnames(country_gdp_pop)[5] <- "ath"
+country_ath <- select(country_gdp_pop, country, ath)
+country_ath$country <- sapply(country_ath$country, tolower)
+country_ath$country <- gsub("\\*$", "", country_ath$country)
+colnames(country_ath) <- c("region", "value")
+#country_choropleth(country_ath, "Distribution of athletes across the world", 
+#                   legend = "Number of athletes")
+```
+
+---
+
+Weight distribution of players for each sport
+
+```{r warning=FALSE}
+ggplot(athletes, aes(sport, weight)) + geom_boxplot() +
+  ggtitle("Box Plot depicting sports vs weight") + xlab("Sports") + ylab("Weight") +
+  coord_flip()
+```
+
+---
+
+Mean height vs weight for all the sports.
+
+Lowest heights and weights are from Gymnastics. 
+
+And, highest values are recorded from Basketball.
+
+```{r warning=FALSE}
+atT <- athletes %>% group_by(sport) %>% summarise(total=n())
+atH <- athletes %>% group_by(sport) %>% summarise(mh=mean(height, na.rm = TRUE))
+atW <- athletes %>% group_by(sport) %>% summarise(mw=mean(weight, na.rm = TRUE))
+athl <- cbind(atH, atW, atT)
+ggplot(athl, aes(mh, mw, color=sport, size=total)) + geom_point() + xlab("Height") + 
+  ylab("Weight") + ggtitle("Height Vs Weight for each Sport ") +
+  scale_size_continuous(range = c(3, 7))
+```
+
+---
+
+Top 10 countries with Gold medals
+
+```{r echo=FALSE}
+top10_gold <- medal_table2016[order(medal_table2016$Gold, decreasing = TRUE),] %>% head(10)
+top10_silver <- medal_table2016[order(medal_table2016$Silver, decreasing = TRUE),] %>% head(10)
+top10_bronze <- medal_table2016[order(medal_table2016$Bronze, decreasing = TRUE),] %>% head(10)
+```
+
+
+```{r}
+ggplot(top10_gold, aes(Country, Gold, fill=Country)) + geom_col(aes(alpha=0.2)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Top 10 countries with gold medals")
+```
+
+---
+
+Top 10 countries with Silver medals
+
+
+```{r}
+ggplot(top10_silver, aes(Country, Silver, fill=Country)) + geom_col(aes(alpha=0.2)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Top 10 countries with silver medals")
+```
+
+---
+
+Top 10 countries with Bronze medals
+
+```{r}
+ggplot(top10_bronze, aes(Country, Bronze, fill=Country)) + geom_col(aes(alpha=0.2)) +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+  ggtitle("Top 10 countries with bronze medals")
+```
+
+---
+
+AthleteRatio - Ratio of number of athletes to population.
+
+Top 10 nations with highest AthleteRatio
+
+```{r}
+country_gdp_pop <- country_gdp_pop %>% mutate(athleteRatio = ath/population)
+
+country_gdp_pop[order(country_gdp_pop$athleteRatio, decreasing = TRUE),] %>% head(10)
+```
+
+---
+
+Top 10 nations with lowest AthleteRatio
+
+```{r}
+country_gdp_pop[order(country_gdp_pop$athleteRatio),] %>% head(10)
+```
+
+---
+
+Does gdp_per_capita of a country have an effect on number of athletes produced by a country?
+
+```{r warning=FALSE}
+ggplot(country_gdp_pop, aes(gdp_per_capita, ath)) + geom_point() + geom_smooth() +
+  xlab("GDP Per Capita") + ylab("Athletes") + ggtitle("gdp per capita vs number of athletes")
+```
+
+---
+
+Medals distribution for 2016 Olympics
+
+```{r warning=FALSE, message=FALSE}
+country_medal <- select(medal_table2016, Country, Total)
+country_medal$Country <- sapply(country_medal$Country, tolower)
+country_medal$Country <- gsub("\\*$", "", country_medal$Country)
+trim.trailing <- function (x) sub("\\s+$", "", x)
+country_medal$Country <- trim.trailing(country_medal$Country)
+colnames(country_medal) <- c("region", "value")
+country_choropleth(country_medal, "Medal density across the world in 2016 olympics",
+                   legend = "Number of medals")
+```
+
+---
+
+Medals distribution for overall Olympics
+
+```{r warning=FALSE, message=FALSE}
+medal_overall_new <- read_csv("E:/R_files_data_wrangling/olympic-games/medalData.csv")
+country_overallmed <- select(medal_overall_new, Country, Total)
+country_overallmed$Country <- sapply(country_overallmed$Country, tolower)
+colnames(country_overallmed) <- c("region", "value")
+country_choropleth(country_overallmed, "Medal density across the world in olympics",
+                   legend = "Number of medals")
+```
+
+---
+
+## Thank You
+
