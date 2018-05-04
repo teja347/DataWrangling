@@ -13,6 +13,12 @@ library(broom)
 library(choroplethr)
 library(choroplethrMaps)
 library(data.table)
+#load athletes file
+input1 = "E:/R_files_data_wrangling/olympic-games/athletes.csv"
+#load countries file
+input2 = "E:/R_files_data_wrangling/olympic-games/countries.csv"
+#load medalData file
+input3 = "E:/R_files_data_wrangling/olympic-games/medalData.csv"
 ```
 
 <style>
@@ -32,12 +38,11 @@ pre code {
 
 Dataset --> Olympics data.
 
-* Data in CSV files. 
+* Data from Kaggle. 
 (https://www.kaggle.com/rio2016/olympic-games/data)
 
 * Scraped data from Wikipedia. 
-(https://en.wikipedia.org/wiki/
-2016_Summer_Olympics_medal_table)
+(https://en.wikipedia.org/wiki/2016_Summer_Olympics_medal_table)
 
 * Scraped data from Olympic database. 
 (http://www.theolympicdatabase.nl/home)
@@ -50,9 +55,9 @@ each country from start of the Olympics till 2016.
 ## Scraping and Loading Data
 
 ```{r warning=FALSE, echo=FALSE, message=FALSE}
-athletes <- read_csv("E:/R_files_data_wrangling/olympic-games/athletes.csv")
+athletes <- read_csv(input1)
 athletes <- athletes %>% mutate(total = gold + silver + bronze)
-countries <- read_csv("E:/R_files_data_wrangling/olympic-games/countries.csv")
+countries <- read_csv(input2)
 colnames(countries)[2] <- "nationality"
 ```
 
@@ -278,7 +283,7 @@ country_choropleth(country_medal, "Medal density across the world in 2016 olympi
 Medals distribution for overall Olympics
 
 ```{r warning=FALSE, message=FALSE}
-medal_overall_new <- read_csv("E:/R_files_data_wrangling/olympic-games/medalData.csv")
+medal_overall_new <- read_csv(input3)
 country_overallmed <- select(medal_overall_new, Country, Total)
 country_overallmed$Country <- sapply(country_overallmed$Country, tolower)
 colnames(country_overallmed) <- c("region", "value")
